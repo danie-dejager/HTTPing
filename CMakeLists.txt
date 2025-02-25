@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
 
-add_compile_options(-Wall -pedantic -Wextra)
-
 project(httping LANGUAGES C VERSION "4.4.0")
 
 # Create compile_commands.json file
@@ -16,6 +14,9 @@ option(USE_TUI "Enable text user interface" OFF)
 option(USE_FFTW3 "Enable FFTW3 backend (depedns on USE_TUI)" OFF)
 option(USE_SSL "Enable SSL support" OFF)
 option(USE_GETTEXT "Enable interantionalization" OFF)
+
+add_compile_options(-Wall -pedantic -Wextra)
+add_compile_options(-Werror=unused-label)
 
 set(SOURCES
   colors.c
@@ -36,11 +37,12 @@ set(SOURCES
 if(USE_SSL)
   set(SOURCES ${SOURCES} mssl.c)
 endif()
-if(USE_FFTW3)
-  set(SOURCES ${SOURCES} fft.c)
-endif()
+
 if(USE_TUI)
   set(SOURCES ${SOURCES} nc.c)
+  if(USE_FFTW3)
+    set(SOURCES ${SOURCES} fft.c)
+  endif()
 endif()
 
 add_executable(httping ${SOURCES})

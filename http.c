@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef NO_SSL
+#if HAVE_OPENSSL
 #include <openssl/ssl.h>
 #include "mssl.h"
 #endif
@@ -17,6 +17,9 @@
 
 int get_HTTP_headers(int socket_h, SSL *ssl_h, char **headers, int *overflow, double timeout)
 {
+#if !HAVE_OPENSSL
+	(void)ssl_h;
+#endif
 	char *term = NULL;
 	int len_in=0, len=4096;
 	char *buffer = (char *)malloc(len + 1);
@@ -31,7 +34,7 @@ int get_HTTP_headers(int socket_h, SSL *ssl_h, char **headers, int *overflow, do
 		int rrc = -1;
 		int now_n = len - len_in;
 
-#ifndef NO_SSL
+#if HAVE_OPENSSL
 		if (ssl_h)
 			rrc = SSL_read(ssl_h, &buffer[len_in], now_n);
 		else
