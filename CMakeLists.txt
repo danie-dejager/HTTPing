@@ -17,6 +17,8 @@ option(USE_GETTEXT "Enable interantionalization" OFF)
 
 add_compile_options(-Wall -pedantic -Wextra)
 add_compile_options(-Werror=unused-label)
+add_compile_options(-Werror=unused-parameter)
+add_compile_options(-Werror=strict-prototypes)
 
 set(SOURCES
   colors.c
@@ -97,5 +99,9 @@ install(FILES httping.1 DESTINATION ${CMAKE_INSTALL_MANDIR})
 message(STATUS "CMake version: ${CMAKE_VERSION}")
 message(STATUS "Use SSL: ${USE_SSL}")
 message(STATUS "Use TUI: ${USE_TUI}")
-message(STATUS "Use FFTW3: ${USE_FFTW3}")
+if(USE_TUI AND USE_FFTW3)
+  message(STATUS "Use FFTW3: ON")
+else()
+  message(STATUS "Use FFTW3: OFF")
+endif()
 message(STATUS "Use gettext: ${USE_GETTEXT}")

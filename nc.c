@@ -463,7 +463,7 @@ void draw_rad_column(WINDOW *win, int x, double val)
 	}
 }
 
-double get_cur_scc()
+double get_cur_scc(void)
 {
         double scc_val = 0.0;
         double prev_val = 0.0, u0 = 0.0;
@@ -593,7 +593,7 @@ void draw_fft(void)
 }
 #endif
 
-double calc_trend()
+double calc_trend(void)
 {
 	int half = history_n / 2, index = 0;
 	double v1 = 0.0, v2 = 0.0;
@@ -626,7 +626,7 @@ double calc_trend()
 	return (v1 - v2) / (v2 / 100.0);
 }
 
-void draw_graph()
+void draw_graph(void)
 {
 	int index = 0, loop_n = min(max_x, history_n), n = 0, n2 = 0;
 	double avg = 0, sd = 0;
@@ -761,6 +761,9 @@ void show_stats_t(int y, int x, char *header, stats_t *data, char abbreviate)
 
 void update_stats(stats_t *resolve, stats_t *connect, stats_t *request, stats_t *total, stats_t *ssl_setup, int n_ok, int n_fail, const char *last_connect_str, const char *fp, char use_tfo, char dg, stats_t *st_to, stats_t *tcp_rtt_stats, int re_tx, int pmtu, int tos, stats_t *close_st, stats_t *t_write, int n_cookies, char abbreviate, stats_t *stats_header_size)
 {
+	(void)tcp_rtt_stats;
+	(void)re_tx;
+	(void)pmtu;
 	char force_redraw = 0;
 	struct pollfd p = { 0, POLLIN, 0 };
 
