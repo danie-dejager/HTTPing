@@ -907,7 +907,9 @@ int main(int argc, char *argv[])
 	int c = 0;
 	int count = -1, curncount = 0;
 	double wait = 1.0;
+#if HAVE_NCURSES
 	char wait_set = 0;
+#endif
 	int audible = 0;
 	int ok = 0, err = 0;
 	double timeout = 30.0;
@@ -932,7 +934,9 @@ int main(int argc, char *argv[])
 	int Bps_limit = -1;
 	char show_bytes_xfer = 0, show_fp = 0;
 	SSL *ssl_h = NULL;
+#if HAVE_OPENSSL
 	BIO *s_bio = NULL;
+#endif
 	struct sockaddr_in *bind_to = NULL;
 	struct sockaddr_in bind_to_4;
 	struct sockaddr_in6 bind_to_6;
@@ -953,14 +957,18 @@ int main(int argc, char *argv[])
 	aggregate_t *aggregates = NULL;
 	char *au_dummy = NULL, *ap_dummy = NULL;
 	stats_t t_connect, t_request, t_total, t_resolve, t_write, t_ssl, t_close, stats_to, tcp_rtt_stats, stats_header_size;
+#if HAVE_NCURSES
 	char first_resolve = 1;
 	double graph_limit = MY_DOUBLE_INF;
 	char nc_graph = 1;
-	char adaptive_interval = 0;
 	double show_slow_log = MY_DOUBLE_INF;
+#endif
+	char adaptive_interval = 0;
 	char use_tcp_nodelay = 1;
 	int max_mtu = -1;
+#ifdef linux
 	int write_sleep = 500; /* in us (microseconds), determines resolution of transmit time determination */
+#endif
 	char keep_cookies = 0;
 	char abbreviate = 0;
 	char *divert_connect = NULL;
@@ -970,14 +978,14 @@ int main(int argc, char *argv[])
 	int n_additional_headers = 0;
 #if HAVE_OPENSSL
 	SSL_CTX *client_ctx = NULL;
-#endif
 	const char *ca_path = NULL;
+	char ignore_ssl_errors = 0;
+#endif
 	struct sockaddr_in6 addr;
 	struct addrinfo *ai = NULL, *ai_use = NULL;
 	struct addrinfo *ai_proxy = NULL, *ai_use_proxy = NULL;
 	char http2 = 0;
 	char use_median = 0;
-	char ignore_ssl_errors = 0;
 
 	static struct option long_options[] =
 	{
@@ -1087,9 +1095,11 @@ int main(int argc, char *argv[])
 				http2 = 1;
 				break;
 
+#if HAVE_OPENSSL
 			case 26:
 				ca_path = optarg;
 				break;
+#endif
 
 			case 27:
 				use_median = 1;
@@ -1145,17 +1155,21 @@ int main(int argc, char *argv[])
 				break;
 #endif
 
+#if HAVE_NCURSES
 			case 13:
 				show_slow_log = atof(optarg);
 				break;
+#endif
 
 			case 12:
 				adaptive_interval = 1;
 				break;
 
+#if HAVE_NCURSES
 			case 11:
 				graph_limit = atof(optarg);
 				break;
+#endif
 
 #if HAVE_NCURSES
 			case 'K':
@@ -1318,12 +1332,14 @@ int main(int argc, char *argv[])
 				count = atoi(optarg);
 				break;
 
+#if HAVE_NCURSES
 			case 'i':
 				wait = atof(optarg);
 				if (wait < 0.0)
 					error_exit(gettext("-i cannot have a value smaller than zero"));
 				wait_set = 1;
 				break;
+#endif
 
 			case 't':
 				timeout = atof(optarg);
@@ -1341,11 +1357,13 @@ int main(int argc, char *argv[])
 				audible = 1;
 				break;
 
+#if HAVE_NCURSES
 			case 'f':
 				wait = 0;
 				wait_set = 1;
 				adaptive_interval = 0;
 				break;
+#endif
 
 			case 'G':
 				get_instead_of_head = 1;
@@ -1369,9 +1387,11 @@ int main(int argc, char *argv[])
 				show_statuscodes = 1;
 				break;
 
+#if HAVE_OPENSSL
 			case 'k':
 				ignore_ssl_errors = 1;
 				break;
+#endif
 
 			case 'V':
 				version();
@@ -1648,7 +1668,9 @@ int main(int argc, char *argv[])
 		char *sc = NULL, *scdummy = NULL;
 		char *fp = NULL;
 		int re_tx = 0, pmtu = 0, recv_tos = 0;
+#if defined(linux) || defined(__FreeBSD__)
 		socklen_t recv_tos_len = sizeof recv_tos;
+#endif
 
 		dstart = get_ts();
 
