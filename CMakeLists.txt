@@ -95,7 +95,7 @@ target_include_directories(httping PUBLIC "${PROJECT_BINARY_DIR}")
 
 install(TARGETS httping DESTINATION bin)
 install(FILES README.md LICENSE plot-json.py DESTINATION ${CMAKE_INSTALL_DOCDIR})
-install(FILES httping.1 DESTINATION ${CMAKE_INSTALL_MANDIR})
+install(FILES httping.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
 
 # setup summary
 message(STATUS "CMake version: ${CMAKE_VERSION}")
