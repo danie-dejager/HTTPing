@@ -14,6 +14,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  fftw-devel
 BuildRequires:  gettext
+BuildRequires:  gzip
 BuildRequires:  ncurses-devel
 BuildRequires:  openssl-devel
 
@@ -27,8 +28,16 @@ also takes time.
 %autosetup -n HTTPing-%{version} -p1
 
 %build
-%cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_FFTW3=ON -DUSE_TUI=1 -DUSE_SSL=ON
+%set_build_flags
+%cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+    -DUSE_FFTW3=ON \
+    -DUSE_TUI=1 \
+    -DUSE_SSL=ON \
+    -DENABLE_LTO=ON
 %cmake_build
+gzip %{name}.1
 
 %install
 %cmake_install
@@ -38,9 +47,13 @@ rm -rf %{buildroot}/%{_docdir}
 %doc README.md plot-json.py
 %license LICENSE
 %{_bindir}/httping
-%{_mandir}/httping.1
+%{_mandir}/man1/httping.1*
 
 %changelog
+* Fri Aug 15 2025 - Danie de Jager <danie.dejager@gmail.com> - 4.4.0-2
+- fix path to the man page
+- compress man page
+
 * Mon Feb 17 2025 - Danie de Jager <danie.dejager@gmail.com> - 4.4.0-1
 
 * Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 3.6-2
