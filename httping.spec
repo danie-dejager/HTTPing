@@ -40,13 +40,15 @@ also takes time.
 
 %install
 %cmake_install
+install -d %{buildroot}%{_mandir}/man1
+mv %{buildroot}%{_mandir}/httping.1 %{buildroot}%{_mandir}/man1/httping.1
 rm -rf %{buildroot}/%{_docdir}
-
+gzip %{buildroot}%{_mandir}/man1/httping.1
 %files
 %doc README.md plot-json.py
 %license LICENSE
 %{_bindir}/httping
-%{_mandir}/man1/httping.1
+%{_mandir}/man1/httping.1*
 
 %changelog
 * Fri Aug 15 2025 - Danie de Jager <danie.dejager@gmail.com> - 4.4.0-2
