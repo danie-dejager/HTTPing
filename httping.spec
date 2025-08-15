@@ -2,7 +2,7 @@
 
 Name:           httping
 Version:        4.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Ping alike tool for http requests
 
 License:        GPL-1.0-or-later AND OpenSSL
@@ -27,7 +27,7 @@ also takes time.
 %autosetup -n HTTPing-%{version} -p1
 
 %build
-%cmake -DUSE_SSL=ON -DUSE_FFTW3=ON -DUSE_TUI=1 -DCMAKE_INSTALL_PREFIX=/usr
+%cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_FFTW3=ON -DUSE_TUI=1 -DUSE_SSL=ON
 %cmake_build
 
 %install
