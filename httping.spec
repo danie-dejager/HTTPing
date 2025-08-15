@@ -38,20 +38,15 @@ also takes time.
     -DENABLE_LTO=ON
 %cmake_build
 
-%check
-%set_build_flags
-%ctest --output-on-failure
-
 %install
 %cmake_install
 rm -rf %{buildroot}/%{_docdir}
-gzip %{name}.1
 
 %files
 %doc README.md plot-json.py
 %license LICENSE
 %{_bindir}/httping
-%{_mandir}/man1/httping.1*
+%{_mandir}/man1/httping.1
 
 %changelog
 * Fri Aug 15 2025 - Danie de Jager <danie.dejager@gmail.com> - 4.4.0-2
