@@ -37,11 +37,15 @@ also takes time.
     -DUSE_SSL=ON \
     -DENABLE_LTO=ON
 %cmake_build
-gzip %{name}.1
+
+%check
+%set_build_flags
+%ctest --output-on-failure
 
 %install
 %cmake_install
 rm -rf %{buildroot}/%{_docdir}
+gzip %{name}.1
 
 %files
 %doc README.md plot-json.py
